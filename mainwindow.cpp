@@ -17,13 +17,27 @@ void MainWindow::setTasks(QMap<int,Task*>* tareas){
     QMap<int,Task*>::iterator iterador;
 
     int pCount = 0;
+
     for(iterador = tareas->begin(); iterador != tareas->end(); iterador++){
+        int cCount = 0;
         Task* tarea = iterador.value();
         char pid[128];
-        sprintf(pid,"%d",tarea->getID() );
+        char cpuUse[128];
+        char memUse[128];
+        char diskUse[128];
+        sprintf(pid,"%d",tarea->getID());
+        sprintf(cpuUse,"%0.2f",tarea->getCpuUse());
+        sprintf(memUse,"%0.2f",tarea->getMemoryUse());
+        sprintf(diskUse,"%0.2f",tarea->getDiskUse());
+
         tabla->insertRow(pCount);
-        QTableWidgetItem* item= new QTableWidgetItem(pid);
-        tabla->setItem(pCount,0,item); //choose the cell u want for your item
+
+        tabla->setItem(pCount,cCount,new QTableWidgetItem(pid));
+        tabla->setItem(pCount,cCount + 1,new QTableWidgetItem(tarea->getDescription()));
+        tabla->setItem(pCount,cCount + 2,new QTableWidgetItem(tarea->getState()));
+        tabla->setItem(pCount,cCount + 3,new QTableWidgetItem(cpuUse));
+        tabla->setItem(pCount,cCount + 4,new QTableWidgetItem(memUse));
+        tabla->setItem(pCount,cCount + 5,new QTableWidgetItem(diskUse));
         pCount++;
     }
 }

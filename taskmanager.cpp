@@ -9,14 +9,14 @@ TaskManager::TaskManager(){
 }
 
 void TaskManager::loadTasks(){
-    QString salida = this->execute("ps -e");
-    //cout<<salida.toStdString().c_str()<<endl;
+    QString salida = this->execute("ps -e -o user,pid,command,state,pcpu,pmem,iostat");
     QStringList procesos = salida.split("\n");
     cout<<"Loaded "<<procesos.size()<<endl;
     for(int i = 1; i < procesos.size(); i++){
         Task* tarea = new Task(procesos.at(i));
         mTasks->insert(i,tarea);
     }
+
 }
 
 QString TaskManager::execute(const char * cmd){
