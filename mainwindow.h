@@ -17,10 +17,13 @@ public:
     ~MainWindow();
 public slots:
     void updateTask(Task*);
+    void setTasks(QMap<int,Task*>*);
+    void ShowContextMenu(const QPoint&);
 private:
     Ui::MainWindow *ui;
     TaskManager* mTaskManager;
-    void setTasks(QMap<int,Task*>*);  
+    pthread_t* mUpdateThread;
+    int mSortColumn;
 };
 
 #endif // MAINWINDOW_H

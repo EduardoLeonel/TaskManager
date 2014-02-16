@@ -5,6 +5,7 @@
 #include <QStringlist>
 #include <QMap>
 #include <QObject>
+#include <pthread.h>
 
 class Task : public QObject {
     Q_OBJECT

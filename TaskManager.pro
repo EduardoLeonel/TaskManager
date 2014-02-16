@@ -15,10 +15,12 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     taskmanager.cpp \
-    task.cpp
+    task.cpp \
+    numericitem.cpp
 
 HEADERS  += mainwindow.h \
     taskmanager.h \
-    task.h
+    task.h \
+    numericitem.h
 
 FORMS    += mainwindow.ui

@@ -2,7 +2,7 @@
 #include <QStringList>
 #include <iostream>
 #include <QString>
-#include <pthread.h>
+
 
 using namespace std;
 
@@ -20,19 +20,22 @@ Task::Task(QString data){
 }
 
 void Task::parseData(){
-    QStringList datos = this->mDataString.split(QRegExp("\\s+"),QString::SkipEmptyParts);
-    if(datos.size() > 0){
+    QStringList datos = this->mDataString.split(QRegExp("\\s+|\\t+"),QString::SkipEmptyParts);
+
+    if(datos.size() >= 6){
         this->mPid = datos.at(1).toInt(0,10);
         this->mState = this->setmState(datos.at(2));
         this->mCPUUse = datos.at(3).toDouble(0);
         this->mMemoryUse = datos.at(4).toDouble(0);
-        QString desc = "";
-        for(int i = 5; i < datos.size() - 1; i++){
-            desc.append(datos.at(i));
-        }
-        this->mDescription = desc;
+        this->mDescription = datos.at(5);
         this->mDiskUse = 0.0;
+        if(datos.size() > 6){
+            for(int i = 6; i < datos.size(); i++){
+                this->mDescription += " " +datos.at(i);
+            }
+        }
     }
+
 }
 
 void Task::doUpdate(const char* command){
