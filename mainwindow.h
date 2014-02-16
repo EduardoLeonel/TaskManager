@@ -15,11 +15,12 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
+public slots:
+    void updateTask(Task*);
 private:
     Ui::MainWindow *ui;
     TaskManager* mTaskManager;
-    void setTasks(QMap<int,Task*>*);
+    void setTasks(QMap<int,Task*>*);  
 };
 
 #endif // MAINWINDOW_H

@@ -2,6 +2,7 @@
 #include <QStringList>
 #include <iostream>
 #include <QString>
+#include <pthread.h>
 
 using namespace std;
 
@@ -9,23 +10,87 @@ using namespace std;
 QStringList Task::keysStates;
 QStringList Task::valueofStates;
 QMap<QString,QString> Task::statesHumanValues;
+int Task::RUNNING;
 
 Task::Task(QString data){
+    mUpdateThread = new pthread_t();
+    this->mDataString = data;
+    this->parseData();
+    Task::RUNNING = 1;
+}
 
-    QStringList datos = data.split(QRegExp("\\s+"),QString::SkipEmptyParts);
+void Task::parseData(){
+    QStringList datos = this->mDataString.split(QRegExp("\\s+"),QString::SkipEmptyParts);
     if(datos.size() > 0){
         this->mPid = datos.at(1).toInt(0,10);
-        this->mDescription = datos.at(2);
-        this->mState = this->setmState(datos.at(3));
-        this->mCPUUse = datos.at(4).toDouble(0);
-        this->mMemoryUse = datos.at(5).toDouble(0);
+        this->mState = this->setmState(datos.at(2));
+        this->mCPUUse = datos.at(3).toDouble(0);
+        this->mMemoryUse = datos.at(4).toDouble(0);
+        QString desc = "";
+        for(int i = 5; i < datos.size() - 1; i++){
+            desc.append(datos.at(i));
+        }
+        this->mDescription = desc;
         this->mDiskUse = 0.0;
     }
+}
 
+void Task::doUpdate(const char* command){
+    QString data = this->execute(command);
+    QStringList salida = data.split("\n");
+    if(salida.size() < 2){
+        return;
+    }
+    data = salida.at(1);
+    if(this->mDataString.compare(data) != 0){
+        this->mDataString = data;
+        this->parseData();
+        //this->emitUpdated();
+        emit updated(this);
+    }
+}
+
+
+void* Task::update(void* param){
+    Task* tarea =(Task*)param;
+    char command[256];
+    sprintf(command,"ps -o user,pid,state,pcpu,pmem,command -p %d",tarea->getID());
+    //cout<<"trying to update process with: "<<command;
+    while(Task::RUNNING == 1){
+        if(tarea != 0){
+            tarea->doUpdate(command);
+        }
+        sleep(2);
+    }
+    return (void*)0;
+}
+QString Task::execute(const char * cmd){
+    FILE* pipe = popen(cmd, "r");
+    if (!pipe) return QString("ERROR");
+    char buffer[128];
+    QString result = "";
+    while(!feof(pipe)) {
+        if(fgets(buffer, 128, pipe) != NULL)
+            result += buffer;
+    }
+    pclose(pipe);
+    return result;
+}
+
+void Task::setRowID(int id){
+    this->mRowId = id;
+}
+
+pthread_t* Task::getUpdateThread(){
+    return this->mUpdateThread;
 }
 
 int Task::getID(){
     return this->mPid;
+}
+
+int Task::getRow(){
+    return this->mRowId;
 }
 
 QString Task::getDescription(){
@@ -72,10 +137,18 @@ QString Task::setmState(QString val){
         this->setStatesHumanvalues();
     }
     QString ret = val+":";
-    cout<<val.toStdString()<<endl;
+    //cout<<val.toStdString()<<endl;
+    QMap<QString,QString>::iterator it;
     for (int i = 0; i < val.size(); i++){
-        ret+=Task::statesHumanValues.find(val.at(i)).value()+" ";
+        it = Task::statesHumanValues.find(val.at(i));
+        if(it != Task::statesHumanValues.end()){
+            ret+=it.value()+" ";
+        }
     }
     return ret;
+}
+
+Task::~Task(){
+    Task::RUNNING = 0;
 }
 

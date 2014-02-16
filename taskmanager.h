@@ -9,8 +9,9 @@
 class TaskManager{
     public:
         TaskManager();
+        ~TaskManager();
         void loadTasks();
-        QString execute(const char *);
+        static QString execute(const char *);
         QMap<int,Task*>* getTasks();
 
     private:
