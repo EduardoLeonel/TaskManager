@@ -2,7 +2,7 @@
 #define TASK_H
 
 #include <QString>
-#include <QStringlist>
+#include <qstringlist.h>
 #include <QMap>
 #include <QObject>
 #include <pthread.h>
@@ -18,7 +18,8 @@ public:
     double  getCpuUse();
     double  getMemoryUse();
     double  getDiskUse();
-    int getRow();
+    int     getPriority();
+    int     getRow();
     static void setStatesHumanvalues();
     static void setKeysStates();
     static void setKeysValues();
@@ -28,6 +29,7 @@ public:
     static void* update(void*);
     QString execute(const char *);
     pthread_t* getUpdateThread();
+
 signals:
      void updated(Task*);
 
@@ -45,6 +47,7 @@ private:
     double mCPUUse;
     double mMemoryUse;
     double mDiskUse;
+    int mPriority;
     static QStringList keysStates;
     static QStringList valueofStates;
 

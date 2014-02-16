@@ -3,11 +3,15 @@
 #include "numericitem.h"
 #include <QTableWidgetItem>
 #include <iostream>
+#include <stdio.h>
+#include <QAction>
+#include <QObject>
 
 using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),ui(new Ui::MainWindow){
     ui->setupUi(this);
+    setTableOptions();
     this->mTaskManager = new TaskManager();
     this->setTasks(mTaskManager->getTasks());
     mUpdateThread = new pthread_t();
@@ -33,10 +37,12 @@ void MainWindow::setTasks(QMap<int,Task*>* tareas){
         char cpuUse[128];
         char memUse[128];
         char diskUse[128];
+        char priority[16];
         sprintf(pid,"%d",tarea->getID());
         sprintf(cpuUse,"%0.2f",tarea->getCpuUse());
         sprintf(memUse,"%0.2f",tarea->getMemoryUse());
         sprintf(diskUse,"%0.2f",tarea->getDiskUse());
+        sprintf(priority,"%d",tarea->getPriority());
 
         if(tabla->rowCount() < pCount+1)
             tabla->insertRow(pCount);
@@ -47,6 +53,7 @@ void MainWindow::setTasks(QMap<int,Task*>* tareas){
         tabla->setItem(pCount,cCount + 3,new QTableWidgetItem(cpuUse));
         tabla->setItem(pCount,cCount + 4,new QTableWidgetItem(memUse));
         tabla->setItem(pCount,cCount + 5,new QTableWidgetItem(diskUse));
+        tabla->setItem(pCount,cCount + 6,new QTableWidgetItem(priority));
         tarea->setRowID(pCount);
         //QObject::connect(tarea,SIGNAL(updated(Task*)),this,SLOT(updateTask(Task*)));
     }
@@ -84,11 +91,24 @@ void MainWindow::ShowContextMenu(const QPoint& pos){
     int cRow = ui->task_table->currentRow();
 
     QMenu myMenu;
+
+    //acciones
+    QAction* killAction = new QAction(this);
+    QAction* priorityAction = new QAction(this);
+    QAction* openedFilesAction = new QAction(this);
+
     myMenu.setTitle("Menu");
     if(cRow >= 0){
         QString name = ui->task_table->item(cRow,1)->text();
-        myMenu.addAction("Kill " + name);
+        //myMenu.addAction("Kill " + name);
+        killAction->setText("Kill " + name);
+        priorityAction->setText("Priority");
+        openedFilesAction->setText("Show opened files");
+        myMenu.addAction(killAction);
+        myMenu.addAction(priorityAction);
+        myMenu.addAction(openedFilesAction);
     }
+
     QMenu sortMenu;
     sortMenu.setTitle("Sort by");
     sortMenu.addAction("PID");
@@ -99,16 +119,34 @@ void MainWindow::ShowContextMenu(const QPoint& pos){
     myMenu.addMenu(&sortMenu);
 
     QAction* selectedItem = myMenu.exec(globalPos);
+
     if (selectedItem){
-        if( selectedItem->text().compare("Name") == 0 ){
+        if( selectedItem->text().compare("Name") == 0){
             mSortColumn = 1;
         }else if( selectedItem->text().compare("PID") == 0 ){
             mSortColumn = 0;
+        }else if(selectedItem == killAction){
+            this->mTaskManager->killProcess(ui->task_table->item(cRow,0)->text().toInt());
+        }else if (selectedItem == openedFilesAction){
+            cout<<this->mTaskManager->getOpenedFiles(ui->task_table->item(cRow,0)->text().toInt()).toStdString()<<endl;
+        }else if (selectedItem == priorityAction){
+            priorityWindow* priorityW = new priorityWindow(this,this->mTaskManager,ui->task_table->item(cRow,0)->text().toInt(),
+                                                           ui->task_table->item(cRow,1)->text(),ui->task_table->item(cRow,6)->text().toInt());
+            priorityW->show();
         }
         ui->task_table->sortByColumn(mSortColumn,Qt::AscendingOrder);
     }else{
         // nothing was chosen
     }
+}
+
+void MainWindow::setTableOptions(){
+    this->setWindowTitle("TaskManager");
+    this->ui->task_table->setSelectionBehavior(QAbstractItemView::SelectRows);
+    this->ui->task_table->setSelectionMode( QAbstractItemView::SingleSelection );
+    this->ui->task_table->setColumnWidth(1,150);
+    this->ui->task_table->setColumnWidth(5,135);
+    this->ui->task_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 
 
@@ -117,5 +155,7 @@ MainWindow::~MainWindow(){
     delete ui;
     delete mTaskManager;
 }
+
+
 
 

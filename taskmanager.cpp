@@ -1,5 +1,6 @@
 #include "taskmanager.h"
 #include <iostream>
+#include <stdio.h>
 #include <QStringList>
 using namespace std;
 
@@ -15,8 +16,7 @@ TaskManager::TaskManager(){
 
 
 void TaskManager::loadTasks(){
-    QString salida = this->execute("ps -e -c -o user,pid,state,pcpu,pmem,command");
-
+    QString salida = this->execute("ps -e -o user,pid,state,pcpu,pmem,pri,command");
     //cout<< salida.toStdString()<<endl;
     QStringList procesos = salida.split("\n");
     //cout<<"Loaded "<<procesos.size()<<endl;
@@ -52,6 +52,15 @@ QString TaskManager::execute(const char * cmd){
 
 QMap<int,Task*>* TaskManager::getTasks(){
     return this->mTasks;
+}
+
+void TaskManager::killProcess(int pid){
+    //cout<<QString("kill %1").arg(pid).toStdString()<<endl;
+    this->execute(QString("kill -9 %1").arg(pid).toStdString().c_str());
+}
+
+QString TaskManager::getOpenedFiles(int pid){
+    return this->execute(QString("lsof -p %1").arg(pid).toStdString().c_str());
 }
 
 TaskManager::~TaskManager(){

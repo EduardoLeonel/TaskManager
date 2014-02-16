@@ -1,8 +1,8 @@
 #include "task.h"
 #include <QStringList>
+#include <stdio.h>
 #include <iostream>
 #include <QString>
-
 
 using namespace std;
 
@@ -27,9 +27,10 @@ void Task::parseData(){
         this->mState = this->setmState(datos.at(2));
         this->mCPUUse = datos.at(3).toDouble(0);
         this->mMemoryUse = datos.at(4).toDouble(0);
-        this->mDescription = datos.at(5);
+        this->mPriority = datos.at(5).toInt();
+        this->mDescription = datos.at(6);
         this->mDiskUse = 0.0;
-        if(datos.size() > 6){
+        if(datos.size() > 7){
             for(int i = 6; i < datos.size(); i++){
                 this->mDescription += " " +datos.at(i);
             }
@@ -103,6 +104,10 @@ QString Task::getDescription(){
 QString Task::getState(){
 
     return this->mState;
+}
+
+int Task::getPriority(){
+    return this->mPriority;
 }
 
 double Task::getCpuUse(){

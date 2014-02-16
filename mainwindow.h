@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <taskmanager.h>
 #include <QMap>
+#include <prioritywindow.h>
 namespace Ui {
 class MainWindow;
 }
@@ -19,6 +20,7 @@ public slots:
     void updateTask(Task*);
     void setTasks(QMap<int,Task*>*);
     void ShowContextMenu(const QPoint&);
+    void setTableOptions();
 private:
     Ui::MainWindow *ui;
     TaskManager* mTaskManager;

@@ -1,10 +1,10 @@
 #ifndef TASKMANAGER_H
 #define TASKMANAGER_H
 
-#import <qmap>
-#import <task.h>
-#import <QString>
-#import <stdio.h>
+#include <QMap>
+#include <task.h>
+#include <QString>
+#include <stdio.h>
 #include <QObject>
 #include <pthread.h>
 
@@ -19,6 +19,8 @@ class TaskManager : public QObject{
         static void* updateProcessData(void*);
         static int UPDATE_INTERVAL;
         static int UPDATE;
+        void killProcess(int);
+        QString getOpenedFiles(int);
 
 signals:
      void updated(QMap<int,Task*>*);

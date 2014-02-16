@@ -16,11 +16,14 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     taskmanager.cpp \
     task.cpp \
-    numericitem.cpp
+    numericitem.cpp \
+    prioritywindow.cpp
 
 HEADERS  += mainwindow.h \
     taskmanager.h \
     task.h \
-    numericitem.h
+    numericitem.h \
+    prioritywindow.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    prioritywindow.ui

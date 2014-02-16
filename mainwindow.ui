@@ -24,7 +24,7 @@
        <widget class="QTableWidget" name="task_table">
         <column>
          <property name="text">
-          <string>PID</string>
+          <string>ID</string>
          </property>
         </column>
         <column>
@@ -44,12 +44,17 @@
         </column>
         <column>
          <property name="text">
-          <string>MEMORY</string>
+          <string>MEMORIA</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string>DISK USE</string>
+          <string>DISCO</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>PRIORITY</string>
          </property>
         </column>
        </widget>
@@ -65,59 +70,6 @@
         <property name="topMargin">
          <number>3</number>
         </property>
-        <item>
-         <widget class="QPushButton" name="pushButton_2">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="text">
-           <string>PushButton</string>
-          </property>
-          <property name="checkable">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton_3">
-          <property name="text">
-           <string>PushButton</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton">
-          <property name="text">
-           <string>PushButton</string>
-          </property>
-         </widget>
-        </item>
        </layout>
       </item>
      </layout>
@@ -130,7 +82,7 @@
      <x>0</x>
      <y>0</y>
      <width>721</width>
-     <height>22</height>
+     <height>17</height>
     </rect>
    </property>
   </widget>
