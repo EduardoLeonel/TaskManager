@@ -20,8 +20,6 @@ class TaskManager : public QObject{
         static int UPDATE_INTERVAL;
         static int UPDATE;
         void killProcess(int);
-        QString getOpenedFiles(int);
-
 signals:
      void updated(QMap<int,Task*>*);
 

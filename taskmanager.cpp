@@ -9,7 +9,7 @@ int TaskManager::UPDATE_INTERVAL;
 
 TaskManager::TaskManager(){
     UPDATE = 1;
-    UPDATE_INTERVAL = 2;
+    UPDATE_INTERVAL = 1;
     this->mTasks = new QMap<int,Task*>();
     this->loadTasks();
 }
@@ -17,13 +17,11 @@ TaskManager::TaskManager(){
 
 void TaskManager::loadTasks(){
     QString salida = this->execute("ps -e -o user,pid,state,pcpu,pmem,pri,command");
-    //cout<< salida.toStdString()<<endl;
     QStringList procesos = salida.split("\n");
     //cout<<"Loaded "<<procesos.size()<<endl;
     for(int i = 1; i < procesos.size(); i++){
         Task* tarea = new Task(procesos.at(i));
-        mTasks->insert(i,tarea);
-        //pthread_create( tarea->getUpdateThread(), NULL, &(Task::update), (void*)tarea);
+        mTasks->insert(i,tarea);     
     }
     emit updated(mTasks);
 }
@@ -33,7 +31,7 @@ void* TaskManager::updateProcessData(void* tm){
     while(TaskManager::UPDATE == 1){
         taskManager->loadTasks();
         sleep(TaskManager::UPDATE_INTERVAL);
-    }
+    }   
     return (void*)0;
 }
 
@@ -55,13 +53,9 @@ QMap<int,Task*>* TaskManager::getTasks(){
 }
 
 void TaskManager::killProcess(int pid){
-    //cout<<QString("kill %1").arg(pid).toStdString()<<endl;
     this->execute(QString("kill -9 %1").arg(pid).toStdString().c_str());
 }
 
-QString TaskManager::getOpenedFiles(int pid){
-    return this->execute(QString("lsof -p %1").arg(pid).toStdString().c_str());
-}
 
 TaskManager::~TaskManager(){
     QMap<int,Task*>::iterator iterador;

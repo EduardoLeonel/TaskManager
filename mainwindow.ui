@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>721</width>
+    <width>900</width>
     <height>516</height>
    </rect>
   </property>
@@ -22,19 +22,22 @@
       </property>
       <item>
        <widget class="QTableWidget" name="task_table">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
         <column>
          <property name="text">
-          <string>ID</string>
+          <string>PID</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string>DESCRIPCION</string>
+          <string>DESCRIPTION</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string>ESTADO</string>
+          <string>STATE</string>
          </property>
         </column>
         <column>
@@ -44,12 +47,12 @@
         </column>
         <column>
          <property name="text">
-          <string>MEMORIA</string>
+          <string>MEMORY</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string>DISCO</string>
+          <string>DISK</string>
          </property>
         </column>
         <column>
@@ -81,7 +84,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>721</width>
+     <width>900</width>
      <height>17</height>
     </rect>
    </property>

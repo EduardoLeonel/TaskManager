@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <taskmanager.h>
+#include <iostream>
 namespace Ui {
 class priorityWindow;
 }

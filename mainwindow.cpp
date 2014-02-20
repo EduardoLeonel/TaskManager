@@ -23,11 +23,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),ui(new Ui::MainWin
                 this, SLOT(ShowContextMenu(const QPoint&)));
 }
 
-
 void MainWindow::setTasks(QMap<int,Task*>* tareas){
     QTableWidget* tabla = this->ui->task_table;
     QMap<int,Task*>::iterator iterador;
-
 
     for(iterador = tareas->begin(); iterador != tareas->end(); iterador++){
         int cCount = 0;
@@ -128,7 +126,8 @@ void MainWindow::ShowContextMenu(const QPoint& pos){
         }else if(selectedItem == killAction){
             this->mTaskManager->killProcess(ui->task_table->item(cRow,0)->text().toInt());
         }else if (selectedItem == openedFilesAction){
-            cout<<this->mTaskManager->getOpenedFiles(ui->task_table->item(cRow,0)->text().toInt()).toStdString()<<endl;
+            openedfiles* openedFilesW = new openedfiles(0,this->mTaskManager,ui->task_table->item(cRow,0)->text().toInt());
+            openedFilesW->show();
         }else if (selectedItem == priorityAction){
             priorityWindow* priorityW = new priorityWindow(this,this->mTaskManager,ui->task_table->item(cRow,0)->text().toInt(),
                                                            ui->task_table->item(cRow,1)->text(),ui->task_table->item(cRow,6)->text().toInt());
@@ -144,7 +143,7 @@ void MainWindow::setTableOptions(){
     this->setWindowTitle("TaskManager");
     this->ui->task_table->setSelectionBehavior(QAbstractItemView::SelectRows);
     this->ui->task_table->setSelectionMode( QAbstractItemView::SingleSelection );
-    this->ui->task_table->setColumnWidth(1,150);
+    this->ui->task_table->setColumnWidth(1,250);
     this->ui->task_table->setColumnWidth(5,135);
     this->ui->task_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }

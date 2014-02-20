@@ -29,6 +29,7 @@ public:
     static void* update(void*);
     QString execute(const char *);
     pthread_t* getUpdateThread();
+    void getOpenedFiles();
 
 signals:
      void updated(Task*);
@@ -50,6 +51,8 @@ private:
     int mPriority;
     static QStringList keysStates;
     static QStringList valueofStates;
+
+
 
 
 };

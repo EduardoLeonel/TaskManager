@@ -21,7 +21,6 @@ Task::Task(QString data){
 
 void Task::parseData(){
     QStringList datos = this->mDataString.split(QRegExp("\\s+|\\t+"),QString::SkipEmptyParts);
-
     if(datos.size() >= 6){
         this->mPid = datos.at(1).toInt(0,10);
         this->mState = this->setmState(datos.at(2));
@@ -36,7 +35,6 @@ void Task::parseData(){
             }
         }
     }
-
 }
 
 void Task::doUpdate(const char* command){
@@ -53,7 +51,6 @@ void Task::doUpdate(const char* command){
         emit updated(this);
     }
 }
-
 
 void* Task::update(void* param){
     Task* tarea =(Task*)param;
@@ -138,7 +135,7 @@ void Task::setKeysValues(){
 }
 
 QString Task::setmState(QString val){
-    //lazy loader
+    //lazy loader .:.
     if(Task::statesHumanValues.size() <= 0){
         this->setKeysStates();
         this->setKeysValues();

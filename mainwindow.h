@@ -5,6 +5,7 @@
 #include <taskmanager.h>
 #include <QMap>
 #include <prioritywindow.h>
+#include <openedfiles.h>
 namespace Ui {
 class MainWindow;
 }
@@ -25,6 +26,7 @@ private:
     Ui::MainWindow *ui;
     TaskManager* mTaskManager;
     pthread_t* mUpdateThread;
+    openedfiles* mOpenedFiles;
     int mSortColumn;
 };
 

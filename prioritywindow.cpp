@@ -25,7 +25,8 @@ priorityWindow::~priorityWindow()
 void priorityWindow::on_setPB_clicked()
 {
     if (!ui->priLE->text().isEmpty()){
-        this->mTm->execute(QString("renice %1 -p %2").arg(ui->priLE->text(),QString("%1").arg(this->mPid)).toStdString().c_str());
+        int newP = -(ui->priLE->text().toInt() - 19);
+        this->mTm->execute(QString("renice %1 %2").arg(QString("%1").arg(newP),QString("%1").arg(this->mPid)).toStdString().c_str());
         this->close();
     }
 }
