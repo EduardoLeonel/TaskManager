@@ -11,7 +11,12 @@ priorityWindow::priorityWindow(QWidget *parent, TaskManager *tm, int pid, QStrin
     this->mCurrentP = currentPriority;
     this->mTm = tm;
     this->setWindowTitle("Priority");
-    this->ui->pnameLabel->setText(this->mPname);
+    if (this->mPname.size() > 30){
+         this->ui->pnameLabel->setText(this->mPname.mid(1,27) +"...");
+    }else{
+        this->ui->pnameLabel->setText(this->mPname);
+    }
+
     this->ui->currentPriorityLabel->setText(QString("%1").arg(mCurrentP));
 }
 

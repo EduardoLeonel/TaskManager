@@ -24,11 +24,6 @@ openedfiles::openedfiles(QWidget *parent, TaskManager *tm, int pid) :
 
 void openedfiles::loadFiles(){
     QStringList x = this->mtm->execute(QString("lsof -p %1 -s ").arg(this->mpid).toStdString().c_str()).split("\n");
-    /*
-    cout<<"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"<<endl;
-    for (int i = 1 ; i<x.size() ; i++)
-        cout<<x.at(i).toStdString()<<endl;
-    */
     this->cFiles = x.size() - 1;
 
     QString data = this->mtm->execute(this->mDataString.toStdString().c_str());

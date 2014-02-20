@@ -99,7 +99,11 @@ void MainWindow::ShowContextMenu(const QPoint& pos){
     if(cRow >= 0){
         QString name = ui->task_table->item(cRow,1)->text();
         //myMenu.addAction("Kill " + name);
-        killAction->setText("Kill " + name);
+        if (name.size() > 50){
+            killAction->setText("Kill " + name.mid(1,45)+"...");
+        }else{
+            killAction->setText("Kill " + name);
+        }
         priorityAction->setText("Priority");
         openedFilesAction->setText("Show opened files");
         myMenu.addAction(killAction);
