@@ -27,6 +27,7 @@ void MainWindow::setTasks(QMap<int,Task*>* tareas){
     QTableWidget* tabla = this->ui->task_table;
     QMap<int,Task*>::iterator iterador;
 
+
     for(iterador = tareas->begin(); iterador != tareas->end(); iterador++){
         int cCount = 0;
         int pCount = iterador.key()-1;
@@ -50,33 +51,21 @@ void MainWindow::setTasks(QMap<int,Task*>* tareas){
         tabla->setItem(pCount,cCount + 2,new QTableWidgetItem(tarea->getState()));
         tabla->setItem(pCount,cCount + 3,new QTableWidgetItem(cpuUse));
         tabla->setItem(pCount,cCount + 4,new QTableWidgetItem(memUse));
-        tabla->setItem(pCount,cCount + 5,new QTableWidgetItem(diskUse));
-        tabla->setItem(pCount,cCount + 6,new QTableWidgetItem(priority));
+        //tabla->setItem(pCount,cCount + 5,new QTableWidgetItem(diskUse));
+        tabla->setItem(pCount,cCount + 5,new QTableWidgetItem(priority));
         tarea->setRowID(pCount);
         //QObject::connect(tarea,SIGNAL(updated(Task*)),this,SLOT(updateTask(Task*)));
     }
+
+    for(int x = tareas->size(); x < tabla->rowCount(); x++){
+        tabla->removeRow(x);
+    }
+
     ui->task_table->sortByColumn(mSortColumn);
 }
 
 void MainWindow::updateTask(Task* tarea){
-    QTableWidget* tabla = this->ui->task_table;
-    int cCount = 0;
-    int row  =tarea->getRow();
-    char pid[128];
-    char cpuUse[128];
-    char memUse[128];
-    char diskUse[128];
-    sprintf(pid,"%d",tarea->getID());
-    sprintf(cpuUse,"%0.2f",tarea->getCpuUse());
-    sprintf(memUse,"%0.2f",tarea->getMemoryUse());
-    sprintf(diskUse,"%0.2f",tarea->getDiskUse());
 
-    tabla->setItem(row,cCount,new QTableWidgetItem(pid));
-    tabla->setItem(row,cCount + 1,new QTableWidgetItem(tarea->getDescription()));
-    tabla->setItem(row,cCount + 2,new QTableWidgetItem(tarea->getState()));
-    tabla->setItem(row,cCount + 3,new QTableWidgetItem(cpuUse));
-    tabla->setItem(row,cCount + 4,new QTableWidgetItem(memUse));
-    tabla->setItem(row,cCount + 5,new QTableWidgetItem(diskUse));
 }
 
 
@@ -134,7 +123,7 @@ void MainWindow::ShowContextMenu(const QPoint& pos){
             openedFilesW->show();
         }else if (selectedItem == priorityAction){
             priorityWindow* priorityW = new priorityWindow(this,this->mTaskManager,ui->task_table->item(cRow,0)->text().toInt(),
-                                                           ui->task_table->item(cRow,1)->text(),ui->task_table->item(cRow,6)->text().toInt());
+                                                           ui->task_table->item(cRow,1)->text(),ui->task_table->item(cRow,5)->text().toInt());
             priorityW->show();
         }
         ui->task_table->sortByColumn(mSortColumn,Qt::AscendingOrder);

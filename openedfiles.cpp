@@ -18,7 +18,7 @@ openedfiles::openedfiles(QWidget *parent, TaskManager *tm, int pid) :
     this->mpid = pid;
     this->mDataString = QString("lsof -p %1 -s -Fns").arg(this->mpid);
     mUpdateThread = new pthread_t();
-    //pthread_create( mUpdateThread, NULL, &(openedfiles::updateFiles), (void*)this);
+    pthread_create( mUpdateThread, NULL, &(openedfiles::updateFiles), (void*)this);
     this->loadFiles();
 }
 
@@ -42,14 +42,20 @@ void* openedfiles::updateFiles(void* param){
 
 
 void openedfiles::setData(){
-    QTableWidget* tabla = this->ui->filesTable;
-    int c = 1;
-    if (tabla->rowCount() > 0)
+     QTableWidget* tabla = this->ui->filesTable;
+    if(this->cFiles < 1){
         for (int i = 0 ; i < tabla->rowCount() ; i++)
             tabla->removeRow(i);
+        return;
+    }
 
+    int c = 1;
+    /*if (tabla->rowCount() > 0)
+        for (int i = 0 ; i < tabla->rowCount() ; i++)
+            tabla->removeRow(i);
+    */
     for (int i = 0 ; i <= this->cFiles ; i++){
-        if(tabla->rowCount() < this->cFiles)
+        if(tabla->rowCount() < i + 1)
             tabla->insertRow(i);
 
         QString dato = this->mfiles.at(c);
@@ -73,6 +79,12 @@ void openedfiles::setData(){
                 }
             }
         }
+    }
+
+
+    //limpiar
+    for(int x = this->cFiles; x < tabla->rowCount(); x++){
+        tabla->removeRow(x);
     }
 }
 

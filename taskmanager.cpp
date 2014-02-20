@@ -9,14 +9,14 @@ int TaskManager::UPDATE_INTERVAL;
 
 TaskManager::TaskManager(){
     UPDATE = 1;
-    UPDATE_INTERVAL = 1;
+    UPDATE_INTERVAL = 3;
     this->mTasks = new QMap<int,Task*>();
     this->loadTasks();
 }
 
 
 void TaskManager::loadTasks(){
-    QString salida = this->execute("ps -e -o user,pid,state,pcpu,pmem,pri,command");
+    QString salida = this->execute("ps -e -c -o user,pid,state,pcpu,pmem,pri,command");
     QStringList procesos = salida.split("\n");
     //cout<<"Loaded "<<procesos.size()<<endl;
     for(int i = 1; i < procesos.size(); i++){
